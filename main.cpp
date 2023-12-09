@@ -33,7 +33,7 @@ int main()
         {
             int keyb = getch();
             printf("Key::: %d", keyb);
-            if(keyb == 13)
+            if(keyb == 13)      // start game
             {
                 while(1)
                 {
@@ -50,14 +50,13 @@ int main()
                         {
                             //  for(ascii = 0; ascii <= 126; ascii++) {
                             firstPlayer[i++] = ascii;
+                            firstPlayer[i]=0;
                             cleardevice();
                             outtextxy(100, 80, "First Player Name: ");
                             //   char playerName[2] = {ascii, '\0'};
-                            outtextxy(300, 80, &ascii);
+                            outtextxy(300, 80, firstPlayer);
                             //  }
-
                         }
-
                     }
                 }
                 cleardevice();
@@ -66,12 +65,12 @@ int main()
                 board(x, y);
 
             }
-            else if(keyb == 99 || keyb == 68)
+            else if(keyb == 99 || keyb == 68) // control
             {
                 cleardevice();
                 outtextxy(200, 100, "How to Play.");
             }
-            else if(keyb == 27)
+            else if(keyb == 27)  // exit
             {
                 exit(0);
             }
