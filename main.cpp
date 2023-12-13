@@ -18,17 +18,13 @@ void mouseEvent();
 int mainMenuXYcordinate(int x, int y);
 void mainSystem(int x, int y, int i, int j);
 void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j);
-int gameDraw(char *a[ROW][COL]) {
+int gameDraw(char *a[ROW][COL]);
 
-    for(int i=0; i<ROW; i++) {
-        for(int j=0; j<COL; j++) {
-            if(*a[i][j] != ' ') {
-                     //&& *a[i][j] != "X" && *a[i][j] != "O"
-                return 1;
-            }
-        }
-    }
-return -1;
+void finalMenu()
+{
+    outtextxy(250, 240, "Try again");
+    outtextxy(240, 270, "Main Menu");
+    outtextxy(275, 300, "Exits");
 }
 
 int currentPlayer = 1;
@@ -89,15 +85,15 @@ void mainSystem(int x, int y, int i, int j)
                 printf("Main System 2");
                 cleardevice();
                 outtextxy(200, 100, "How to Play Game!");
-               /* if(kbhit())
-                {
-                    char ctr = getch();
-                    if(ctr == 98)
-                    {
-                        controlPanals();
-                    }
-                }
-                */
+                /* if(kbhit())
+                 {
+                     char ctr = getch();
+                     if(ctr == 98)
+                     {
+                         controlPanals();
+                     }
+                 }
+                 */
             }
             //else if(keyb == 27)  // exit
             else
@@ -133,7 +129,6 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
 
         // board handle in mouse click
         int result = handleClick(mouseX, mouseY);
-        //printf("Result :: %d ", result);
 
         if(result != -1)
         {
@@ -143,28 +138,17 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
 
             if(a[row][col] == " ")
             {
-
-
                 if(currentPlayer == 1)
                 {
-                    //printf("\n\nCurrent player :: X\n\n");
                     a[row][col] = "X";
-                    //circle(mouseX, mouseY, 10);
-                    //currentPlayer = 2;
                 }
                 else
                 {
-                    //printf("\n\nCurrent player :: O\n\n");
                     a[row][col] = "O";
-                    // currentPlayer = 1;
                 }
 
                 int gameReturn = gameWin(a, currentPlayer);
-                printf("GAME RESURN ::: %d ", gameReturn);
-
-                int gameD = gameDraw(a);
-
-                printf("\n\nGame Draw:: %d\n\n", gameD);
+                printf("GAME RETURN ::: %d ", gameReturn);
 
                 if( gameReturn == 1)
                 {
@@ -173,10 +157,7 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
                     sprintf(str,"Player %s Win!", (currentPlayer == 1)? "First" : "Second");
                     outtextxy(200, 200, str);
 
-                    // again start
-                    outtextxy(250, 240, "Try again");
-                    outtextxy(240, 270, "Main Menu");
-                    outtextxy(275, 300, "Exits");
+                    finalMenu();
                     while(1)
                     {
                         int menuClick = 0;
@@ -222,14 +203,29 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
                     }
 
                     //board(x, y, a, firstPlayer, secondPlayer);
-                    break;
+                    //break;
                 }
+
+
+                int gameD = gameDraw(a);
+                printf("\n\nGame Draw:: %d\n\n", gameD);
+
+                if(gameD == 1)
+                {
+                    cleardevice();
+                    printf("\n\nGAME is DRAW.\n\n");
+                    outtextxy(100, 100, "Game is Draw");
+
+                    finalMenu();
+
+                }
+
                 currentPlayer = 3-currentPlayer;        // current player first 1 then 2
             }
 
         }
 
-        //  clearmouseclick(WM_LBUTTONDOWN);                // mouse clear event
+        clearmouseclick(WM_LBUTTONDOWN);                // mouse clear event
 
     }
 }
@@ -281,7 +277,7 @@ void board(int x, int y, char *board[ROW][COL], char nameF[], char nameS[])
         x = 210;
         y = y + 70;
     }
-  //  rectangle(150, 30, 200, 150);
+    //  rectangle(150, 30, 200, 150);
     //currentTime();
 }
 
@@ -312,6 +308,23 @@ void currentTime()
 
 }
 
+// game draw
+int gameDraw(char *a[ROW][COL])
+{
+    for(int i=0; i<ROW; i++)
+    {
+        for(int j=0; j<COL; j++)
+        {
+            if(*a[i][j] == ' ')
+            {
+                //&& *a[i][j] != "X" && *a[i][j] != "O"
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
 // game win check func
 int gameWin(char *arr[ROW][COL], int player)
 {
@@ -319,22 +332,29 @@ int gameWin(char *arr[ROW][COL], int player)
     char value;
     if(player==1)
     {
+
         value = 'X';
+        printf("\n\n Player One : %c", value);
     }
     else
     {
         value = 'O';
+        printf("\n\n Player TWO : %c", value);
     }
     char *ptr = &value;
     printf("Check the game win");
     printf("\n\nTHE GEME WIN SLOT PTR:::: %c\n", *ptr );
     printf("\n\nTHE GEME WIN SLOT:::: %c\n", *arr[0][0] );
+
+
+
     for(int i=0; i<4; i++)
     {
         if((*arr[i][0]== *ptr && *arr[i][1]== *ptr && *arr[i][2]== *ptr && *arr[i][3]== *ptr ) ||
                 (*arr[0][i]== *ptr && *arr[1][i]== *ptr && *arr[2][i]== *ptr && *arr[3][i]== *ptr )
           )
         {
+            printf("Row or COl");
             return 1;
         }
 
@@ -342,12 +362,13 @@ int gameWin(char *arr[ROW][COL], int player)
                 (*arr[0][3]==*ptr && *arr[1][2]==*ptr && *arr[2][1]==*ptr && *arr[3][0]==*ptr )
           )
         {
+            printf("Digonal");
             return 1;
         }
 
     }
-    return 0;
 
+    return 0;
 }
 
 // 2nd page control panal func
@@ -402,9 +423,9 @@ char* playerName(int i, int ascii)
 void inputPlayerName(char firstPlayer[], char secondPlayer[])
 {
     cleardevice();
-    // setcolor(BLACK);
+     setcolor(RED);
     // setfillstyle(SOLID_FILL, RED);
-    //  rectangle(30, 100, 100, 50);
+      rectangle(30, 100, 100, 50);
     outtextxy(240, 230, "Enter");
     outtextxy(120, 150, "First Player Name: ");
     outtextxy(120, 180, "Second Player Name: ");
