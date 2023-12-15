@@ -301,7 +301,7 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
         // board show
         cleardevice();
         board(x, y, a, firstPlayer, secondPlayer);  // board show
-
+        printf("\n\n\nCheck \n\n");
         // mouse click event
         int mouseClick = 0;
         int mouseX, mouseY;
@@ -333,23 +333,27 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
                 {
                     a[row][col] = "O";
                 }
-
+//Sleep(2000);
                 int gameResult;
+
+
                 gameResult = gameWin(a, currentPlayer);
 
                 if( gameResult == 1)
                 {
-                    Sleep(200);
+                    cleardevice();
+                    board(x, y, a, firstPlayer, secondPlayer);  // board show
+                    Sleep(1500);
                     finalMenu(firstPlayer, secondPlayer, gameResult);
                     finalMenuMouseclickEvent(x, y, a, firstPlayer, secondPlayer, i, j);
                 }
-
 
                 gameResult = gameDraw(a);
                 if(gameResult == 1)
                 {
                     cleardevice();
-
+                    board(x, y, a, firstPlayer, secondPlayer);  // board show
+                    Sleep(1500);
                     finalMenu(firstPlayer, secondPlayer, gameResult+1);
                     finalMenuMouseclickEvent(x, y, a, firstPlayer, secondPlayer, i, j);
                     Sleep(9000000);
