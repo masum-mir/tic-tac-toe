@@ -828,26 +828,3 @@ int* mouseclickEvent()
 
     return arr;
 }
-
-void startGame()
-{
-
-}
-
-// normal consol board func
-void drawBoard(char *a[4][4])
-{
-    printf("__________________________\n");
-    printf("|%s   | %s    | %s    | %s   |\n", a[0][0], a[0][1], a[0][2], a[0][3]);
-    printf("|    |      |      |     |\n");
-    printf("|____|______|______|_____|\n");
-    printf("|%s   | %s    | %s    | %s   |\n", a[1][0], a[1][1], a[1][2], a[1][3]);
-    printf("|    |      |      |     |\n");
-    printf("|____|______|______|_____|\n");
-    printf("|%s   | %s   | %s   | %s  |\n", a[2][0], a[2][1], a[2][2], a[2][3]);
-    printf("|    |      |      |     |\n");
-    printf("|____|______|______|_____|\n");
-    printf("|%s  | %s   | %s   | %s  |\n", a[3][0], a[3][1], a[3][2], a[3][3]);
-    printf("|    |      |      |     |\n");
-    printf("|____|______|______|_____|\n");
-}
