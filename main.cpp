@@ -4,25 +4,32 @@
 #include <time.h>
 #define ROW 4
 #define COL 4
+#define X 180
+#define Y 150
 
-void drawBoard(char *a[ROW][COL]); // drawing board normal
-void board(int x, int y, char *board[ROW][COL], char nameF[], char nameS[]); // drawing board graphics
-int gameWin(char *arr[ROW][COL], int player);  // game win logic
-void currentTime();  // current time display
-void homePage(int x, int y); // first home page
-int boardXYcoordinate(int x, int y);  // board click cursor
-int controlPanalsXYcordinate(int x, int y);     // control click cursor
-int controlPanals();   // control panals
-void inputPlayerName(char firstPlayer[], char secondPlayer[]);    // player input
+void drawBoard(char *a[ROW][COL]); // drawing board normal ..!
+void board(char *board[ROW][COL], char nameF[], char nameS[]); // drawing board graphics ..!
+int gameWin(char *arr[ROW][COL], int player);  // game win logic ..!
+void currentTime();  // current time display ..!
+void homePage(); // first home page ..!
+int boardXYcoordinate(int x, int y);  // board click cursor ..!
+int controlPanalsXYcordinate(int x, int y);     // control click cursor ..!
+int controlPanals();   // control panals ..!
+void inputPlayerName(char firstPlayer[], char secondPlayer[], char *a[ROW][COL],int m,int n);    // player input ..!
 void mouseEvent();
-int lastMenuXYcordinate(int x, int y);  // main menu mouse click event
-void mainSystem(int x, int y, int i, int j);    // main system start
-void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j);   // main baord control
-int gameDraw(char *a[ROW][COL]);        // game draw
-void menuPage(); // menu
-void playerNameShow(); // player name show
-void finalMenu(char firstPlayer[], char secondPlayer[], int result); // last menu page
-void finalMenuMouseclickEvent(int x, int y, char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j);
+int lastMenuXYcordinate(int x, int y);  // main menu mouse click event ..!
+void mainSystem(int i, int j);    // main system start ..!
+void boardSystem(char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j);   // main baord control ..!
+int gameDraw(char *a[ROW][COL]);        // game draw ..!
+void menuPage(); // menu ..!
+void playerNameShow(); // player name show ..!
+void finalMenu(char firstPlayer[], char secondPlayer[], int result); // last menu page ..!
+void finalMenuMouseclickEvent(char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j);
+void inputPlayerNameShow(char firstPlayer[], char secondPlayer[]);  // input player name show ..!
+int playButton(); // play button mouse click event ..!
+int playButtonXYcordinate(int x,int y);
+int backButton();   // back button mouse click event ..!
+int backButtonXYcordinate(int x,int y);
 
 void drawButton(int left, int top, int right, int bottom)
 {
@@ -45,7 +52,7 @@ int currentPlayer = 1;
 
 int main()
 {
-    int gd = DETECT, gm, x = 210, y = 150, i=0, j=0;
+    int gd = DETECT, gm, x = X, y = Y, i=0, j=0;
 
     initgraph(&gd, &gm, "");
     setbkcolor(COLOR(10,6,33));
@@ -53,147 +60,137 @@ int main()
 
     setcolor(WHITE);
     settextstyle(DEFAULT_FONT, HORIZ_DIR, 3);
-    // printText(160, 200, "Made with");
 
-    printText(160, 200, "Made with");
+    printText(X-20, Y+50, "Made with");
     for (int i = 0; i < 400; i += 5)
     {
         setcolor(COLOR(255 - i, i, 0));
-        printText(330, 240, "Believers.");
-        delay(20);
+        printText(X+150, Y+90, "Believers.");
+        delay(50);
     }
-    Sleep(10);
 
     clearMyDevice();
     setcolor(WHITE);
     settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
-    printText(170, 380, "LOADING PLEASE WAIT."); // loading page
+    printText(X-10, Y+220, "LOADING PLEASE WAIT..."); // loading page ..!
 
-    delay(1000);        // 1.5 sec sleep
+    delay(1000);        // 1 sec sleep ..!
 
-    homePage(x, y);         // welcome page
+    homePage();         // welcome page ..!
 
-    while(getch() != 13);   // enter click then next page
+    while(getch() != 13);
 
-    mainSystem(x,y,i,j);
+    mainSystem(i,j);    // main menu ..!
 
     getch();
     closegraph();
     return 0;
 }
 
-// home page
-void homePage(int x, int y)
+// home page ..!
+void homePage()
 {
     clearMyDevice();
     settextstyle(EUROPEAN_FONT,HORIZ_DIR, 1.5);
     settextstyle(1,HORIZ_DIR,7);
     setcolor(LIGHTBLUE);
-    printText(x-60,y-60,"TIC");
+    printText(X-60,Y-60,"TIC");
     setcolor(LIGHTRED);
-    printText(x,y,"TAC");
+    printText(X,Y,"TAC");
     setcolor(LIGHTMAGENTA);
-    printText(x+70,y+60,"TOE");
+    printText(X+70,Y+60,"TOE");
     setcolor(WHITE);
     settextstyle(EUROPEAN_FONT,HORIZ_DIR, 1);
     settextstyle(1,HORIZ_DIR,1);
-    printText(200, 300, "Please click ");
+    printText(X+20, Y+150, "Please click ");
     setcolor(RED);
-    printText(347, 300, "Enter ");
+    printText(X+167, Y+150, "Enter ");
     setcolor(WHITE);
-    printText(418, 300, "button.");
+    printText(X+238, Y+150, "button.");
 }
 
-// main system
-void mainSystem(int x, int y, int i, int j)
+// main system ..!
+void mainSystem(int i, int j)
 {
-
     char *a[ROW][COL] = {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "};
     char firstPlayer[20], secondPlayer[20];
-    printf("len::: %d \n", strlen(firstPlayer));
     //char* firstPlayer = (char)*malloc(10);
     //char* secondPlayer = (char)*malloc(10);
-    //int currentPlayercurrentPlayer = 1, mouseX, mouseY;
-
+    int x = X, y = Y;
     while(1)
     {
-        menuPage();    // menu
-        int r = controlPanals();    //
-        // if(kbhit())
+        menuPage();    // menu ..!
+        int r = controlPanals();
+
         if(r!=-1)
         {
-
-            //int keyb = getch();
-            //if(keyb == 13)      // start game
-
-            if(r==1)        // start game
+            if(r==1)        // start game ..!
             {
-                // playerNameShow();
-                inputPlayerName(firstPlayer, secondPlayer);     // input player name
-                //clearmouseclick(WM_LBUTTONDOWN); // remove auto set value but face some problem
-                boardSystem(x, y, a, firstPlayer, secondPlayer, i, j);
-
+                inputPlayerName(firstPlayer, secondPlayer,a,i,j);   // input player name ..!
             }
-            // else if(keyb == 99 || keyb == 68) // controls
-            else if(r==2)
+
+            else if(r==2)   // control game..!
             {
-                printf("Main System 2");
                 clearMyDevice();
-                //printText(80, 50, "Back");
-                printText(80, 50, "Back");
-                printText(200, 100, "How to Play Game!");
+
+                settextstyle(EUROPEAN_FONT,HORIZ_DIR, 2.3);
+                printText(200, 50, "How to Play Game!");
+                line(200,70,440,70);
+                settextstyle(EUROPEAN_FONT,HORIZ_DIR,1);
+                outtextxy(15,78,"1.In This Game one player plays Against Another player.");
+                outtextxy(15,108,"2.The Game is Played in a 4 X 4 Board(GRID).");
+                outtextxy(15,138,"3.Each Game,The Players are Assigned Symbols To play");
+                outtextxy(30,168,"('X' or 'O').");
+                outtextxy(15,198,"4.Any Player Who Have 4 Same Symbols Together in any");
+                outtextxy(30,228,"Direction(Diagonal,Horizontal,Vertical)Wins the Game.");
+                outtextxy(15,258,"5.If The Board Gets Full With Symbols then the Game ");
+                outtextxy(30,288,"is Draw.");
+                settextstyle(EUROPEAN_FONT,HORIZ_DIR, 2.3);
+
+                drawButton(270,325,350,358);
+                printText(280, 330, "Back");
+                while(1)
+                {
+                    int result= backButton();
+                    if(result==1)
+                    {
+                        cleardevice();
+                        mainSystem(i, j);
+                        break;
+                    }
+                }
                 getch();
-                /* if(kbhit())
-                 {
-                     char ctr = getch();
-                     if(ctr == 98)
-                     {
-                         controlPanals();
-                     }
-                 }
-                 */
+
             }
-            //else if(keyb == 27)  // exit
-            else
+            else        // exit game..!
             {
                 closegraph();
                 exit(0);
             }
         }
-
     }
 }
 
-// void menuPage()
+// menuPage ..!
 void menuPage()
 {
     settextstyle(EUROPEAN_FONT,HORIZ_DIR, 1);
     setcolor(WHITE);
     clearMyDevice();
 
-    // drawButton(210, 135, 345, 170);
-    // printText(220, 140, "Start Game");
+    drawButton(X+80, Y-2, X+215, Y+35);
+    printText(X+90, Y+5, "Start Game");
 
-    // drawButton(210, 175, 345, 210);
-    // printText(220, 180, "Control");
+    drawButton(X+80, Y+38, X+215, Y+75);
+    printText(X+105, Y+45, "Control");
 
-    // drawButton(210, 215, 345, 250);
-    // printText(220, 220, "Exits");
-
-    drawButton(260, 148, 395, 185);
-    printText(270, 155, "Start Game");
-
-    drawButton(260, 188, 395, 225);
-    printText(285, 195, "Control");
-
-    drawButton(260, 228, 395, 265);
-    printText(300, 235, "Exit");
+    drawButton(X+80, Y+78, X+215, Y+115);
+    printText(X+120, Y+85, "Exit");
 }
 
-// 2nd page control panal func
+// control panal func ..!
 int controlPanals()
 {
-
     int mouseClick = 0;
     int mouseXX, mouseYY;
     while (!mouseClick)
@@ -220,43 +217,32 @@ int controlPanals()
     return r;
 }
 
-// player name display
-void playerNameShow()
-{
-    printText(130, 150, "Player 1 name: ");
-    printText(130, 185, "Player 2 name: ");
-
-    drawButton(265, 245, 335, 280);
-    printText(278, 252, "Play");
-}
-
-// input player name    func
-void inputPlayerName(char firstPlayer[], char secondPlayer[])
+// input player name func ..!
+void inputPlayerName(char firstPlayer[], char secondPlayer[],char *a[ROW][COL],int m,int n)
 {
     clearMyDevice();
-    setcolor(WHITE);
     playerNameShow();
-
+    int checkPlayButton = 0;
     int i=0, j =0;
 
     while(1)
     {
-        if(kbhit())     // keyboard press
+        /*
+        if(checkPlayButton == 0)
         {
-            char ascii = getch();   // return ascii value
-            //printf("Player One: %d\n", ascii);
-            //printf("\nlength:: :%d", strlen(firstPlayer));
-            /*
-             if(strlen(firstPlayer) == 1)
-             {
-                 printf("Please input first name!");
-                 printText(120, 100, "Please input first name!");
-                 firstPlayer[i++] = ascii;
-                 firstPlayer[i]=0;
-                 printText(350, 150, firstPlayer);
-                 //continue;
-             }
-            */
+            int result=playButton();
+            if(result == 1)
+            {
+                setcolor(RED);
+                printText(120, 100, "Please input name & enter!");
+                setcolor(WHITE);
+            }
+        }
+        */
+        if(kbhit())
+        {
+            char ascii = getch();
+
             if(ascii == 13)
             {
                 if(i == 0)
@@ -274,21 +260,19 @@ void inputPlayerName(char firstPlayer[], char secondPlayer[])
                 {
                     i--;
                     firstPlayer[i] = '\0';
-
                     //memset(firstPlayer, '\0', sizeof(firstPlayer));
                     printf("\n\nLength:: %d\n\n", strlen(firstPlayer));
                     clearMyDevice();
-                    printText(330, 150, firstPlayer);
-                    playerNameShow();
+                    inputPlayerNameShow(firstPlayer, secondPlayer);
                 }
             }
             else
             {
                 clearMyDevice();
-                firstPlayer[i++] = ascii;       // store player name
-                firstPlayer[i]=0;
-                printText(330, 150, firstPlayer);       // player name show
-                playerNameShow();
+                firstPlayer[i++] = ascii;       // store player name ..!
+                firstPlayer[i]='\0';
+                secondPlayer[0]='\0';
+                inputPlayerNameShow(firstPlayer, secondPlayer);
             }
         }
     }
@@ -298,7 +282,6 @@ void inputPlayerName(char firstPlayer[], char secondPlayer[])
         if(kbhit())
         {
             char ascii = getch();
-            printf("Player two ::; %d", ascii);
             if(ascii==13)
             {
                 if(j == 0)
@@ -308,7 +291,16 @@ void inputPlayerName(char firstPlayer[], char secondPlayer[])
                     setcolor(WHITE);
                     continue;
                 }
-                break;
+                while(1)
+                {
+                    int result=playButton();
+                    printf("check login button %d",result);
+                    if(result==1)
+                    {
+                        boardSystem(a, firstPlayer, secondPlayer, m, n);
+                        printf("check play system");
+                    }
+                }
             }
             else if(ascii == 8)
             {
@@ -317,40 +309,59 @@ void inputPlayerName(char firstPlayer[], char secondPlayer[])
                     j--;
                     secondPlayer[j] = '\0';
                     clearMyDevice();
-                    printText(330, 150, firstPlayer);
-                    printText(330, 185, secondPlayer);
-                    playerNameShow();
+                    inputPlayerNameShow(firstPlayer, secondPlayer);
                 }
             }
             else
             {
-                // second player name
                 clearMyDevice();
-                secondPlayer[j++] = ascii;
-                secondPlayer[j]=0;
-                printText(330, 150, firstPlayer);
-                printText(330, 185, secondPlayer);
-                playerNameShow();
+                secondPlayer[j++] = ascii;       // store player name ..!
+                secondPlayer[j]='\0';
+                inputPlayerNameShow(firstPlayer, secondPlayer);
             }
         }
     }
 }
 
-//main board
-void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j)
+void inputPlayerNameShow(char firstPlayer[], char secondPlayer[])
 {
+    printText(X+150, Y, firstPlayer);
+    printText(X+150, Y+35, secondPlayer);
+    playerNameShow();
+}
 
-//while(!kbhit())
+/*
+void warningMsg(char str[])
+{
+    setcolor(RED);
+    char str2[20];
+    sprintf(str2, "Please input %s name!", str);
+    printText(120, 100, str2);
+    setcolor(WHITE);
+}
+*/
+
+// player name display ..!
+void playerNameShow()
+{
+    printText(X-50, Y, "Player 1 name: ");
+    printText(X-50, Y+35, "Player 2 name: ");
+    drawButton(X+85, Y+95, X+155, Y+130);
+    printText(X+98, Y+102, "Play");
+}
+
+//main board ..!
+void boardSystem(char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j)
+{
     while(1)
     {
-        // board show
         clearMyDevice();
-        board(x, y, a, firstPlayer, secondPlayer);  // board show
+        board(a, firstPlayer, secondPlayer);  // board show ..!
         printf("\n\n\nCheck \n\n");
-        // mouse click event
+
         int mouseClick = 0;
         int mouseX, mouseY;
-        while(!mouseClick)
+        while(!mouseClick)       // mouse click event ..!
         {
             if(ismouseclick(WM_LBUTTONDOWN))
             {
@@ -359,15 +370,15 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
             }
         }
 
-        // board handle in mouse click
-        int result = boardXYcoordinate(mouseX, mouseY);         // return mouse xy coordinate
+        // board control in mouse click ..!
+        int result = boardXYcoordinate(mouseX, mouseY);         // return mouse xy coordinate ..!
 
         if(result != -1)
         {
-            int row = result / ROW;  // row position
-            int col = result % COL;  // col position
+            int row = result / ROW;
+            int col = result % COL;
 
-            if(a[row][col] == " ")      //check row & col empty
+            if(a[row][col] == " ")      //check row & col empty ..!
             {
                 printf("\n\nArray value:: %c\n\n", a[row][col]);
                 if(currentPlayer == 1)
@@ -386,70 +397,71 @@ void boardSystem(int x, int y, char *a[ROW][COL], char firstPlayer[], char secon
                 if( gameResult == 1)
                 {
                     clearMyDevice();
-                    board(x, y, a, firstPlayer, secondPlayer);  // board show
+                    board(a, firstPlayer, secondPlayer);  // board show ..!
                     Sleep(1000);
                     finalMenu(firstPlayer, secondPlayer, gameResult);
-                    finalMenuMouseclickEvent(x, y, a, firstPlayer, secondPlayer, i, j);
+                    finalMenuMouseclickEvent(a, firstPlayer, secondPlayer, i, j);
                 }
 
                 gameResult = gameDraw(a);
                 if(gameResult == 1)
                 {
                     clearMyDevice();
-                    board(x, y, a, firstPlayer, secondPlayer);  // board show
+                    board(a, firstPlayer, secondPlayer);  // board show ..!
                     Sleep(1000);
                     finalMenu(firstPlayer, secondPlayer, gameResult+1);
-                    finalMenuMouseclickEvent(x, y, a, firstPlayer, secondPlayer, i, j);
+                    finalMenuMouseclickEvent(a, firstPlayer, secondPlayer, i, j);
                     getch();
                 }
-                currentPlayer = 3-currentPlayer;       // current player first 1 then 2
+                currentPlayer = 3-currentPlayer;       // current player first 1 then 2 ..!
             }
         }
-        clearmouseclick(WM_LBUTTONDOWN);            // mouse clear event
+        clearmouseclick(WM_LBUTTONDOWN);
     }
 }
 
-// board drawing func
-void board(int x, int y, char *board[ROW][COL], char nameFP[], char nameSP[])
+// board drawing func ..!
+void board(char *board[ROW][COL], char nameFP[], char nameSP[])
 {
     settextstyle(EUROPEAN_FONT, HORIZ_DIR, 1);
 
     setcolor(LIGHTBLUE);
-    printText(280,30,"TIC");
+    printText(X+60,Y-120,"TIC");
     setcolor(LIGHTRED);
-    printText(330,30,"TAC");
+    printText(X+110,Y-120,"TAC");
     setcolor(LIGHTMAGENTA);
-    printText(390,30,"TOE");
+    printText(X+170,Y-120,"TOE");
 
-    line(280,50, 440, 50);
+    line(X+60,Y-100, X+220, Y-100);
     setcolor(WHITE);
 
-    printText(210, 70, nameFP);
+    printText(X+10, Y-70, nameFP);
     setcolor(LIGHTMAGENTA);
-    printText(340, 70, "vs");
+    printText(X+130, Y-70, "vs");
     setcolor(WHITE);
-    printText(415, 70, nameSP);
+    printText(X+210, Y-70, nameSP);
     setcolor(LIGHTMAGENTA);
+
+    int x = X, y = Y, rectWidth = 65, rectHeight = 65;
 
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            //setfillstyle(SOLID_FILL, RED);
-            rectangle(x, y, x + 70, y + 70);            // board create
+            rectangle(x, y, x + rectWidth, y + rectHeight);
             setcolor(WHITE);
-            printText(x + 15, y + 15, board[i][j]);
+            printText(x + 28, y + 28, board[i][j]);
             setcolor(LIGHTMAGENTA);
-            x += 70;
+            x += rectWidth + 5;
         }
-        x = 210;
-        y = y + 70;
+        x = X;
+        y = y + rectHeight + 5;
     }
     //  rectangle(150, 30, 200, 150);
     //currentTime();
 }
 
-//current time show func
+//current time show func ..!
 void currentTime()
 {
     while (1)
@@ -469,7 +481,7 @@ void currentTime()
 
 }
 
-// game draw
+// game draw check ..!
 int gameDraw(char *a[ROW][COL])
 {
     printf("Hello game draw");
@@ -479,7 +491,6 @@ int gameDraw(char *a[ROW][COL])
         {
             if(*a[i][j] == ' ')
             {
-                //&& *a[i][j] != "X" && *a[i][j] != "O"
                 return 0;
             }
         }
@@ -487,7 +498,7 @@ int gameDraw(char *a[ROW][COL])
     return 1;
 }
 
-// game win check func
+// game win check ..!
 int gameWin(char *arr[ROW][COL], int player)
 {
     printf("\n\nCurrent player:: %d\n\n", player);
@@ -507,15 +518,12 @@ int gameWin(char *arr[ROW][COL], int player)
     printf("\n\nTHE GEME WIN SLOT PTR:::: %c\n", *ptr );
     printf("\n\nTHE GEME WIN SLOT:::: %c\n", *arr[0][0] );
 
-
-
     for(int i=0; i<4; i++)
     {
         if((*arr[i][0]== *ptr && *arr[i][1]== *ptr && *arr[i][2]== *ptr && *arr[i][3]== *ptr ) ||
                 (*arr[0][i]== *ptr && *arr[1][i]== *ptr && *arr[2][i]== *ptr && *arr[3][i]== *ptr )
           )
         {
-            printf("Row or COl");
             return 1;
         }
 
@@ -523,10 +531,8 @@ int gameWin(char *arr[ROW][COL], int player)
                 (*arr[0][3]==*ptr && *arr[1][2]==*ptr && *arr[2][1]==*ptr && *arr[3][0]==*ptr )
           )
         {
-            printf("Digonal");
             return 1;
         }
-
     }
 
     return 0;
@@ -543,8 +549,6 @@ char* playerName(int i, int ascii)
     return
 }
 */
-
-
 
 int lastMenuXYcordinate(int x, int y)
 {
@@ -585,75 +589,76 @@ int controlPanalsXYcordinate(int x, int y)
     return -1;
 }
 
-// board click event func
+// board click event func ..!
 int boardXYcoordinate(int x, int y)
 {
     printf("\n\nX ::: %d \n\n, Y ::: %d \n", x, y);
 
-    if ( (x > 210 && x <= 280) && (y > 150 && y<=220))
+    if ( (x > 179 && x <= 244) && (y > 140 && y<=205))
     {
         return 0;
     }
-    if ( (x > 280 && x <= 350) && (y > 150 && y<=220))
+    if ( (x > 249 && x <= 314) && (y > 140 && y<=205))
     {
         return 1;
     }
-    if ( (x > 350 && x <= 420) && (y > 150 && y<=220))
+    if ( (x > 319 && x <= 384) && (y > 140 && y<=205))
     {
         return 2;
     }
-    if ( (x > 420 && x <= 490) && (y > 150 && y<=220))
+    if ( (x > 389 && x <= 454) && (y > 140 && y<=205))
     {
         return 3;
     }
 
-    if ( (x > 210 && x <= 280) && (y > 220 && y<=290))
+    if ( (x > 179 && x <= 244) && (y > 210 && y<=275))
     {
         return 4;
     }
-    if ( (x > 280 && x <= 350) && (y > 220 && y<=290))
+
+    if ( (x > 249 && x <= 314) && (y > 210 && y<=275))
     {
         return 5;
     }
-    if ( (x > 350 && x <= 420) && (y > 220 && y<=290))
+    if ( (x > 319 && x <= 384) && (y > 210 && y<=275))
     {
         return 6;
     }
-    if ( (x > 420 && x <= 490) && (y > 220 && y<=290))
+    if ( (x > 389 && x <= 454) && (y > 210 && y<=275))
     {
         return 7;
     }
 
-    if ( (x > 210 && x <= 280) && (y > 290 && y<=360))
+    if ( (x > 179 && x <= 244) && (y > 280 && y<=345))
     {
         return 8;
     }
-    if ( (x > 280 && x <= 350) && (y > 290 && y<=360))
+    if ( (x > 249 && x <= 314) && (y > 280 && y<=345))
     {
         return 9;
     }
-    if ( (x > 350 && x <= 420) && (y > 290 && y<=360))
+    if ( (x > 319 && x <= 384) && (y > 280 && y<=345))
     {
         return 10;
     }
-    if ( (x > 420 && x <= 490) && (y > 290 && y<=360))
+    if ( (x > 389 && x <= 454) && (y > 280 && y<=345))
     {
         return 11;
     }
 
-    if ( (x > 210 && x <= 280) && (y > 360 && y<=430))
+    if ( (x > 179 && x <= 244) && (y > 350 && y<=415))
     {
         return 12;
     }
-    if ( (x > 280 && x <= 350) && (y > 360 && y<=430))
+    if ( (x > 249 && x <= 314) && (y > 350 && y<=415))
     {
         return 13;
     }
-    if ( (x > 350 && x <= 420) && (y > 360 && y<=430))
+    if ( (x > 319 && x <= 384) && (y > 350 && y<=415))
     {
         return 14;
     }
-    if ( (x > 420 && x <= 490) && (y > 360 && y<=430))
+    if ( (x > 389 && x <= 454) && (y > 350 && y<=415))
     {
         return 15;
     }
@@ -661,7 +666,7 @@ int boardXYcoordinate(int x, int y)
     return -1;
 }
 
-// final menu show
+// .. final menu show ..!
 void finalMenu(char firstPlayer[], char secondPlayer[], int result)
 {
     clearMyDevice();
@@ -676,29 +681,27 @@ void finalMenu(char firstPlayer[], char secondPlayer[], int result)
         sprintf(str,"Game is draw!");
     }
 
-    drawButton(240, 230, 380, 265);
-    printText(255, 235, "Play Again");
+    drawButton(X+60, Y+80, X+200, Y+115);
+    printText(X+75, Y+85, "Play Again");
 
-    drawButton(240, 270, 380, 300);
-    printText(280, 275, "Menu");
+    drawButton(X+60, Y+120, X+200, Y+150);
+    printText(X+100, Y+125, "Menu");
 
-    drawButton(240, 305, 380, 335);
-    printText(290, 310, "Exit");
+    drawButton(X+60, Y+155, X+200, Y+185);
+    printText(X+110, Y+160, "Exit");
 
     settextstyle(DEFAULT_FONT, HORIZ_DIR, 3);
     for (int i = 0; i < 500; i += 5)
     {
         setcolor(COLOR(255 - i, i, 0));
-        printText(180, 180, str);
+        printText(X, Y+30, str);
         delay(20);
     }
 
-    // printText(230, 180, str);
-
 }
 
-// final menu mouse event
-void finalMenuMouseclickEvent(int x, int y, char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j)
+// final menu mouse event ..!
+void finalMenuMouseclickEvent(char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int i, int j)
 {
     while(1)
     {
@@ -722,14 +725,14 @@ void finalMenuMouseclickEvent(int x, int y, char *a[ROW][COL], char firstPlayer[
                 {
                     for(int j=0; j<COL; j++)
                     {
-                        a[i][j] = " ";              // clear memory
+                        a[i][j] = " ";              // clear memory ..!
                     }
                 }
-                boardSystem(x, y, a, firstPlayer, secondPlayer, i, j);
+                boardSystem(a, firstPlayer, secondPlayer, i, j);
             }
             else if(r==2)
             {
-                mainSystem(x,y,i,j);
+                mainSystem(i,j);
             }
             else
             {
@@ -737,14 +740,72 @@ void finalMenuMouseclickEvent(int x, int y, char *a[ROW][COL], char firstPlayer[
                 exit(0);
             }
         }
-
         clearmouseclick(WM_LBUTTONDOWN);
-
     }
 }
 
+// play button ..!
+int playButton()
+{
+    printf("\n\n\nCheck \n\n");
 
-// mouse event func
+    int playClick = 0;
+    int playX, playY;
+    while(!playClick)
+    {
+        if(ismouseclick(WM_LBUTTONDOWN))
+        {
+            getmouseclick(WM_LBUTTONDOWN, playX, playY);
+            playClick = 1;
+        }
+    }
+    int r=playButtonXYcordinate(playX,playY);
+
+    clearmouseclick(WM_LBUTTONDOWN);
+    return r;
+}
+
+int playButtonXYcordinate(int x,int y)
+{
+    printf("playbutton x,y coordinate:%d %d",x,y);
+    if((x>=265 && x<=335) && (y>=245 && y<=282))
+    {
+        return 1;
+    }
+    return -1;
+}
+
+int backButton()
+
+{
+    int buttonClick = 0;
+    int buttonX, buttonY;
+    while (!buttonClick)
+    {
+        if (ismouseclick(WM_LBUTTONDOWN))
+        {
+            getmouseclick(WM_LBUTTONDOWN, buttonX, buttonY);
+            buttonClick = 1;
+            printf("mouse click: %d \n", buttonClick);
+        }
+    }
+    int r=backButtonXYcordinate(buttonX,buttonY);
+    printf("\n Option selected first :: %d \n\n", r);
+    clearmouseclick(WM_LBUTTONDOWN);
+    return r;
+}
+
+int backButtonXYcordinate(int x,int y)
+{
+    printf("backbutton x,y coordinate:%d %d",x,y);
+    if(x>=269 && x<=350 && y>=326 && y<=356)
+    {
+        return 1;
+    }
+    return -1;
+}
+
+// mouse event func ..!
 int* mouseclickEvent()
 {
     int n = 0;
