@@ -1,12 +1,9 @@
-/*
-    Name: Masum,        ID: 2023-3-60-066
-    Name: Maidul Islam, ID: 2023-3-60-068
-    Name: Yasir Arafat, ID: 2023-3-60-079
-*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <graphics.h>
 #include <time.h>
+#include "customHeader.h"
 #define ROW 4
 #define COL 4
 #define X 180
@@ -35,23 +32,9 @@ int playButton(); // play button mouse click event ..!
 int playButtonXYcordinate(int x,int y);
 int backButton();   // back button mouse click event ..!
 int backButtonXYcordinate(int x,int y);
+void matchLineShow(char *arr[ROW][COL], int player);
 
-void drawButton(int left, int top, int right, int bottom)
-{
-    setcolor(LIGHTMAGENTA);
-    rectangle(left, top, right, bottom);
-    setcolor(WHITE);
-}
 
-void printText(int x, int y, char *str)
-{
-    outtextxy(x, y, str);
-}
-
-void clearMyDevice()
-{
-    cleardevice();
-}
 
 int currentPlayer = 1;
 
@@ -71,7 +54,7 @@ int main()
     {
         setcolor(COLOR(255 - i, i, 0));
         printText(X+150, Y+90, "Believers.");
-        delay(50);
+        delay(40);   // 50 ns
     }
 
     clearMyDevice();
@@ -204,7 +187,6 @@ int controlPanals()
         {
             getmouseclick(WM_LBUTTONDOWN, mouseXX, mouseYY);
             mouseClick = 1;
-            printf("mouse click: %d \n", mouseClick);
         }
     }
 
@@ -217,7 +199,6 @@ int controlPanals()
     */
 
     int r = controlPanalsXYcordinate(mouseXX, mouseYY);
-    printf("\n Option selected first :: %d \n\n", r);
     clearmouseclick(WM_LBUTTONDOWN);
     return r;
 }
@@ -403,7 +384,8 @@ void boardSystem(char *a[ROW][COL], char firstPlayer[], char secondPlayer[], int
                 {
                     clearMyDevice();
                     board(a, firstPlayer, secondPlayer);  // board show ..!
-                    Sleep(1000);
+                    matchLineShow(a, currentPlayer);      // line show
+                    Sleep(3000);
                     finalMenu(firstPlayer, secondPlayer, gameResult);
                     finalMenuMouseclickEvent(a, firstPlayer, secondPlayer, i, j);
                 }
@@ -455,7 +437,7 @@ void board(char *board[ROW][COL], char nameFP[], char nameSP[])
         {
             rectangle(x, y, x + rectWidth, y + rectHeight);
             setcolor(WHITE);
-            printText(x + 28, y + 28, board[i][j]);
+            printText(x + 26, y + 26, board[i][j]);
             setcolor(LIGHTMAGENTA);
             x += rectWidth + 5;
         }
@@ -541,6 +523,88 @@ int gameWin(char *arr[ROW][COL], int player)
     }
 
     return 0;
+}
+
+void matchLineShow(char *arr[ROW][COL], int player)
+{
+
+    char value;
+    if(player==1)
+    {
+        value = 'X';
+        printf("\n\n Player One : %c", value);
+    }
+    else
+    {
+        value = 'O';
+        printf("\n\n Player TWO : %c", value);
+    }
+    char *ptr = &value;
+
+    // column
+    if(*arr[0][0]== *ptr && *arr[0][1]== *ptr && *arr[0][2]== *ptr && *arr[0][3]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(200,185,440,185);
+    }
+
+    if(*arr[1][0]== *ptr && *arr[1][1]== *ptr && *arr[1][2]== *ptr && *arr[1][3]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(200,255,440,255);
+    }
+
+    if(*arr[2][0]== *ptr && *arr[2][1]== *ptr && *arr[2][2]== *ptr && *arr[2][3]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(200,325,440,325);
+    }
+
+    if(*arr[3][0]== *ptr && *arr[3][1]== *ptr && *arr[3][2]== *ptr && *arr[3][3]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(200,395,440,395);
+    }
+
+    // row
+
+    if(*arr[0][0]== *ptr && *arr[1][0]== *ptr && *arr[2][0]== *ptr && *arr[3][0]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(215,170,215,410);
+    }
+
+    if(*arr[0][1]== *ptr && *arr[1][1]== *ptr && *arr[2][1]== *ptr && *arr[3][1]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(285,170,285,410);
+    }
+
+    if(*arr[0][2]== *ptr && *arr[1][2]== *ptr && *arr[2][2]== *ptr && *arr[3][2]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(355,170,355,410);
+    }
+
+    if(*arr[0][3]== *ptr && *arr[1][3]== *ptr && *arr[2][3]== *ptr && *arr[3][3]== *ptr )
+    {
+        setcolor(YELLOW);
+        line(425,170,425,410);
+    }
+
+    // diagonal
+    if((*arr[0][0]==*ptr && *arr[1][1]==*ptr && *arr[2][2]==*ptr && *arr[3][3]==*ptr )
+      )
+    {
+        setcolor(YELLOW);
+        line(200,170,440,410);
+    }
+
+    if(*arr[0][3]==*ptr && *arr[1][2]==*ptr && *arr[2][1]==*ptr && *arr[3][0]==*ptr )
+    {
+        setcolor(YELLOW);
+        line(440,170,200,410);
+    }
 }
 
 /*
