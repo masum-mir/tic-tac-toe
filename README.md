@@ -1,6 +1,7 @@
 # tic-tac-toe 4vs4
 
 **System Specifications:
+
 ● Operating System: Window
 
 ● file format .cpp
