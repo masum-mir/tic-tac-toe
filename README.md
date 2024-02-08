@@ -1,4 +1,4 @@
-# tic-tac-toe 4vs4
+# <p align="center"> tic-tac-toe 4vs4
 # youtube link : https://youtu.be/GX9xOxA5rf0?si=7-EdLhu6uGkWN5pR
 ## Introductions:
 Tic-Tac-Toe is a classic game that focuses on thinking, and problem solving. It is actually a two
